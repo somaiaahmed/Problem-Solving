@@ -1,36 +1,24 @@
 class Solution {
 public:
     int maxTwoEvents(vector<vector<int>>& events) {
-        sort(events.begin(),events.end());
-        vector<vector<int>> dp(events.size(), vector<int>(3, -1));
-        return findEvents(events, 0, 0, dp);
-        
-    }
-
-    int findEvents(vector<vector<int>>& events, int index, int count,
-                  vector<vector<int>>& dp){
-        if(count == 2 || index >= events.size())
-            return 0;
-        
-        if(dp[index][count] == -1){
-            int end = events[index][1];
-            int l = index + 1, h = events.size() - 1;
-
-            while(l<h){
-                int mid = l + ((h - l) >> 1) ;
-                if(events[mid][0] > end)
-                    h=mid;
-                else
-                    l =mid + 1;
-            }
-            int include = events[index][2] + (l < events.size() && events[l][0] > end 
-                                                ? findEvents(events, l, count+1, dp) 
-                                                :0 );
-            int exclude = findEvents(events, index+1, count, dp);
-            dp[index][count] = max(include, exclude);
+        vector<array<int, 3>> times;
+        for (auto& e : events) {
+            // 1 denotes start time.
+            times.push_back({e[0], 1, e[2]});
+            // 0 denotes end time.
+            times.push_back({e[1] + 1, 0, e[2]});
         }
-        return dp[index][count];
-
-
+        int ans = 0, maxValue = 0;
+        sort(begin(times), end(times));
+        for (auto& timeValue : times) {
+            // If current time is a start time, find maximum sum of maximum end
+            // time till now.
+            if (timeValue[1]) {
+                ans = max(ans, timeValue[2] + maxValue);
+            } else {
+                maxValue = max(maxValue, timeValue[2]);
+            }
+        }
+        return ans;
     }
 };
