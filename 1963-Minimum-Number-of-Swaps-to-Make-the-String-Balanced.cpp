@@ -1,14 +1,14 @@
 class Solution {
 public:
     int minSwaps(string s) {
-        stack<char> stk;
+        int stack = 0;
         int unbalanced = 0;
         for(auto c : s){
             if(c == '[')
-                stk.push(c);
+                stack ++;
             else{
-                if(!stk.empty())
-                    stk.pop();
+                if(stack)
+                    stack--;
                 else
                     unbalanced++;
             }
