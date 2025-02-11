@@ -1,23 +1,22 @@
 class Solution {
-    struct data{
-        int quantity, stores;
-        bool operator <(const data& other) const{
-            return 1LL * quantity * other.stores < 1LL * stores * other.quantity;
-        }
-    };
 public:
     int minimizedMaximum(int n, vector<int>& quantities) {
-        int m = quantities.size();
-        priority_queue<data> pr;
-        for(int i = 0; i < m ;i++){
-            pr.push({quantities[i], 1});
+        int st = 1, end = 10e5, cur = -1, md;
+
+        while(st <= end){
+            md = st+end >>1;
+            int stores = 0;
+            for(auto c : quantities){
+                stores += (c+md-1)/md;
+            }
+            if(stores <= n){
+                cur = md;
+                end = md - 1;
+            }
+            else{
+                st = md+1;
+            }
         }
-        for(int i = 0; i < n-m; i++){
-            auto cur = pr.top();
-            pr.pop();
-            pr.push({cur.quantity, cur.stores+1});
-        }
-        return ceil(1.0*pr.top().quantity / pr.top().stores);
-        
+        return cur;
     }
 };
