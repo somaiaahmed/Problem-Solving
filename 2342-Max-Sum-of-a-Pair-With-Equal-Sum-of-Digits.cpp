@@ -2,7 +2,7 @@ class Solution {
 public:
     int maximumSum(vector<int>& nums) {
         int n = nums.size(), ans = -1;
-        map <int,int> mp;
+        unordered_map <int,int> mp;
         for(auto n:nums){
             int sum = 0;
             int temp = n;
