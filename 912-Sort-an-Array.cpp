@@ -1,15 +1,15 @@
 class Solution {
 public:
     vector<int> sortArray(vector<int>& nums) {
-        vector<int> arr(100001);
-        for(auto x : nums){
-            arr[x + 50000]++;
+        priority_queue<int, vector<int>,greater<int>> minHeap;
+        for(auto num : nums){
+            minHeap.push(num);
         }
-        vector<int> ans;
-        for(int i =0 ;i<100001;i++){
-            while(arr[i]--)
-            ans.push_back(i-50000);
+        for(int i = 0;i <nums.size(); i++){
+            nums[i] = minHeap.top();
+            minHeap.pop();
         }
-        return ans;
+
+        return nums;
     }
 };
