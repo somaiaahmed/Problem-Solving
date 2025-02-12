@@ -2,8 +2,7 @@ class Solution {
 public:
     int maximumSum(vector<int>& nums) {
         int n = nums.size(), ans = -1;
-        vector<pair<int,int>> v;
-        v.reserve(n);
+        map <int,int> mp;
         for(auto n:nums){
             int sum = 0;
             int temp = n;
@@ -11,13 +10,13 @@ public:
                 sum+=n%10;
                 n/=10;
             }
-           v.push_back({sum,temp});
+            if(!mp.count(sum)) mp[sum] = temp;
+            else{
+                ans = max(ans, mp[sum] + temp);
+                mp[sum] = max(mp[sum], temp);
+            }
         }
-        sort(v.begin(),v.end());
-        for(int i = 1; i<v.size();i++){
-            if(v[i].first == v[i-1].first)
-                ans = max(ans, v[i].second + v[i-1].second);  
-        }
+        
         return ans;
     }
 };
