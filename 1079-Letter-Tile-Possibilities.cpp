@@ -1,21 +1,19 @@
 class Solution {
 public:
     bitset<8> vis;
-    unordered_set<string> st;
-    void solve(string s, string cur){
-        st.insert(cur);
+    int solve(string s){
+        int ans = 1;
         for(int i = 0; i<s.size(); i++){
-            if(vis[i]) continue;
+            if(vis[i] || (i && s[i] == s[i-1] && !vis[i-1])) continue;
             vis[i] = 1;
-            cur.push_back(s[i]);
-            solve(s, cur);
-            cur.pop_back();
+            ans+=solve(s);
             vis[i] = 0;
         }
+        return ans;
     }
     int numTilePossibilities(string tiles) {
-        solve(tiles, "");
-        return st.size() - 1;
+        sort(tiles.begin(), tiles.end());
+        return solve(tiles) -1;
 
     }
 };
