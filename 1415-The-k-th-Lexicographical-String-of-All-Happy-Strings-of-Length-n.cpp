@@ -1,9 +1,12 @@
 class Solution {
 public:
-    vector<string> v;
+    string ans = "";
+    int gk;
     void solve(int n, string s){
         if(!n){
-            v.push_back(s);
+            gk--;
+            if(!gk)
+                ans = s;
             return;
         }
         for(char ch = 'a'; ch <= 'c'; ch++){
@@ -14,7 +17,8 @@ public:
         }
     }
     string getHappyString(int n, int k) {
+        gk = k;
         solve(n, "");
-        return v.size() >= k ? v[k-1] : "";
+        return ans;
     }
 };
