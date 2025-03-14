@@ -1,32 +1,32 @@
 class Solution {
 public:
-    int minZeroArray(vector<int>& nums, vector<vector<int>>& queries) {
-        int n = nums.size(), sum = 0, k = 0;
-        vector<int> differenceArray(n + 1);
-
-        // Iterate through nums
-        for (int index = 0; index < n; index++) {
-            // Iterate through queries while current index of nums cannot equal
-            // zero
-            while (sum + differenceArray[index] < nums[index]) {
-                k++;
-
-                // Zero array isn't formed after all queries are processed
-                if (k > queries.size()) {
-                    return -1;
-                }
-                int left = queries[k - 1][0], right = queries[k - 1][1],
-                    val = queries[k - 1][2];
-
-                // Process start and end of range
-                if (right >= index) {
-                    differenceArray[max(left, index)] += val;
-                    differenceArray[right + 1] -= val;
-                }
-            }
-            // Update prefix sum at current index
-            sum += differenceArray[index];
+    bool ok(int md, vector<int>& nums, vector<vector<int>>& q){
+        int n = nums.size();
+        vector<int> v(n+1);
+        for(int i = 0; i < md; i++){
+            int l = q[i][0], r = q[i][1], val = q[i][2];
+            v[l]+=val;
+            v[r+1]-=val;
         }
-        return k;
+        int sum = 0;
+        for(int i = 0; i < n; i++){
+            sum +=v[i];
+            if(sum < nums[i]) return false;
+        }
+        return true;
+    }
+
+    int minZeroArray(vector<int>& nums, vector<vector<int>>& q) {
+        int n = nums.size(), st = 0, ed = q.size(), cur = -1, md;
+        while(st <= ed){
+            md = (st+ed)/2;
+            if(ok(md, nums, q)){
+                cur = md;
+                ed = md - 1;
+            }
+            else
+            st = md + 1;
+        }
+        return cur;
     }
 };
